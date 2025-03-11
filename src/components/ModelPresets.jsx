@@ -9,7 +9,7 @@ const ModelPresets = ({ onPresetSelect }) => {
     { id: 'deepseek-r1-32b', name: 'DeepSeek R1 32B', parameters: 32 },
     { id: 'deepseek-r1-671b', name: 'DeepSeek R1 671B', parameters: 671 },
     { id: 'mistral-7b', name: 'Mistral 7B', parameters: 7 },
-    { id: 'gpt3-175b', name: 'GPT-3 175B', parameters: 175 }
+    { id: 'gpt5-10t', name: 'GPT-5 10T', parameters: 10000 }
   ];
 
   const handlePresetClick = (preset) => {

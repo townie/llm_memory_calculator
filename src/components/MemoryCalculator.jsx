@@ -6,9 +6,10 @@ import Tooltip from './Tooltip';
 import { calculateMemory } from '../utils/calculationUtils';
 
 const MemoryCalculator = () => {
+  // Make sure initial state uses one of the allowed quantization values
   const [modelParams, setModelParams] = useState({
     parameters: 7, // in billions
-    quantizationBits: 16,
+    quantizationBits: 16, // Using a valid quantization value from our set
     overheadFactor: 1.2
   });
   const [memoryRequired, setMemoryRequired] = useState(0);
@@ -46,11 +47,19 @@ const MemoryCalculator = () => {
     });
   };
 
+  // Format parameter display for large values
+  const formatParameterDisplay = (value) => {
+    if (value >= 1000) {
+      return `${(value/1000).toFixed(1)}T`;
+    }
+    return `${value}B`;
+  };
+
   return (
     <div className="bg-gray-800 bg-opacity-60 backdrop-blur-lg rounded-xl p-6 shadow-lg overflow-hidden relative">
       <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500"></div>
       
-      {/* Results Section - Now positioned at the top */}
+      {/* Results Section */}
       <div className="mb-10 py-6 px-4 bg-gray-900 bg-opacity-40 rounded-xl shadow-inner border border-gray-700/50">
         <div className="flex items-center justify-between mb-2">
           <h2 className="text-2xl font-bold text-cyan-300">Memory Required</h2>
@@ -67,13 +76,15 @@ const MemoryCalculator = () => {
         <div className="flex flex-col md:flex-row items-center justify-center gap-8 mt-3">
           <div className={`transition-transform duration-300 ${isCalculating ? 'scale-95 opacity-70' : 'scale-100 opacity-100'}`}>
             <div className="text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-blue-400 text-center">
-              {memoryRequired.toFixed(1)} <span className="text-3xl">GB</span>
+              {memoryRequired >= 1000 ? 
+                `${(memoryRequired / 1000).toFixed(1)}TB` : 
+                `${memoryRequired.toFixed(1)}GB`}
             </div>
           </div>
           
           <div className="text-center md:text-left text-gray-300">
             <p className="mb-1">
-              For a <span className="font-semibold text-white">{modelParams.parameters}B</span> parameter model
+              For a <span className="font-semibold text-white">{formatParameterDisplay(modelParams.parameters)}</span> parameter model
             </p>
             <p>
               at <span className="font-semibold text-white">{modelParams.quantizationBits}-bit</span> precision
@@ -99,12 +110,12 @@ const MemoryCalculator = () => {
             name="parameters"
             label="Model Size"
             value={modelParams.parameters}
-            min={1}
-            max={1000}
-            step={1}
+            min={0.5}
+            max={10000}
+            step={0.1}
             unit="B"
             onChange={handleSliderChange}
-            tooltip="The number of parameters in billions (e.g., 70 for a 70B model)"
+            tooltip="The number of parameters in billions (e.g., 7 for a 7B model, 1000 for a 1T model)"
           />
           
           <ParameterSlider 
@@ -116,7 +127,7 @@ const MemoryCalculator = () => {
             step={2}
             unit="bits"
             onChange={handleSliderChange}
-            tooltip="The number of bits used for model quantization (e.g., 16, 8, or 4 bits)"
+            tooltip="The precision in bits for model weights (2, 4, 8, 16, or 32 bits)"
           />
           
           <ParameterSlider 

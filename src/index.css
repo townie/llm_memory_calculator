@@ -2,24 +2,120 @@
 @tailwind components;
 @tailwind utilities;
 
-::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
+:root {
+  color-scheme: dark;
 }
 
-::-webkit-scrollbar-track {
-  background-color: transparent;
+body {
+  background-color: #0f172a;
+  color: #f8fafc;
+  font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-::-webkit-scrollbar-thumb {
-  border-radius: 25px;
-  transition: all 0.3s;
-  background-color: rgba(106, 115, 125, 0.2);
-  &:hover {
-    background-color: rgba(106, 115, 125, 0.27);
-  }
+/* Custom styles for the quantization slider with steps */
+.slider-with-steps {
+  /* Increase the clickable area for better user interaction */
+  height: 20px !important;
+  margin-top: -9px;
+  margin-bottom: -9px;
 }
 
-::-webkit-scrollbar-corner {
-  display: none;
+/* Style the thumb to make it more visible */
+.slider-with-steps::-webkit-slider-thumb {
+  appearance: none;
+  width: 12px;
+  height: 24px;
+  background: rgb(6, 182, 212);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 0 8px rgba(6, 182, 212, 0.5);
+}
+
+.slider-with-steps::-moz-range-thumb {
+  width: 12px;
+  height: 24px;
+  background: rgb(6, 182, 212);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 0 8px rgba(6, 182, 212, 0.5);
+}
+
+/* Add hover effect */
+.slider-with-steps:hover::-webkit-slider-thumb {
+  background: rgb(8, 145, 178);
+  transform: scale(1.1);
+}
+
+.slider-with-steps:hover::-moz-range-thumb {
+  background: rgb(8, 145, 178);
+  transform: scale(1.1);
+}
+
+/* Active effect */
+.slider-with-steps:active::-webkit-slider-thumb {
+  background: rgb(14, 116, 144);
+  transform: scale(1.2);
+}
+
+.slider-with-steps:active::-moz-range-thumb {
+  background: rgb(14, 116, 144);
+  transform: scale(1.2);
+}
+
+/* Custom styles for the parameter slider */
+.param-slider {
+  height: 20px !important;
+  margin-top: -9px;
+  margin-bottom: -9px;
+}
+
+.param-slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  background: rgb(6, 182, 212);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 0 8px rgba(6, 182, 212, 0.5);
+}
+
+.param-slider::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  background: rgb(6, 182, 212);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 0 8px rgba(6, 182, 212, 0.5);
+}
+
+.param-slider:hover::-webkit-slider-thumb {
+  background: rgb(8, 145, 178);
+  transform: scale(1.1);
+  box-shadow: 0 0 12px rgba(6, 182, 212, 0.7);
+}
+
+.param-slider:hover::-moz-range-thumb {
+  background: rgb(8, 145, 178);
+  transform: scale(1.1);
+  box-shadow: 0 0 12px rgba(6, 182, 212, 0.7);
+}
+
+.param-slider:active::-webkit-slider-thumb {
+  background: rgb(14, 116, 144);
+  transform: scale(1.2);
+  box-shadow: 0 0 16px rgba(6, 182, 212, 0.8);
+}
+
+.param-slider:active::-moz-range-thumb {
+  background: rgb(14, 116, 144);
+  transform: scale(1.2);
+  box-shadow: 0 0 16px rgba(6, 182, 212, 0.8);
 }
