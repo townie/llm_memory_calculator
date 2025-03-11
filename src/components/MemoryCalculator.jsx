@@ -4,21 +4,23 @@ import ModelPresets from './ModelPresets';
 import GPURequirements from './GPURequirements';
 import Tooltip from './Tooltip';
 import { calculateMemory } from '../utils/calculationUtils';
-
 const MemoryCalculator = () => {
-  // Make sure initial state uses one of the allowed quantization values
+  // Updated initial state to use Llama 3.3 70B as default
   const [modelParams, setModelParams] = useState({
-    parameters: 7, // in billions
-    quantizationBits: 16, // Using a valid quantization value from our set
+    parameters: 70, // Changed from 7 to 70 for Llama 3.3 70B
+    quantizationBits: 8,
     overheadFactor: 1.2
   });
   const [memoryRequired, setMemoryRequired] = useState(0);
   const [isCalculating, setIsCalculating] = useState(false);
-
+  
+  // Default preset ID for Llama 3.3 70B
+  const defaultPresetId = 'llama3.3-70b';
+  
   useEffect(() => {
     updateMemoryCalculation();
   }, [modelParams]);
-
+  
   const updateMemoryCalculation = () => {
     setIsCalculating(true);
     // Add slight delay to show calculation animation
@@ -32,21 +34,21 @@ const MemoryCalculator = () => {
       setIsCalculating(false);
     }, 300);
   };
-
+  
   const handlePresetSelect = (preset) => {
     setModelParams({
       ...modelParams,
       parameters: preset.parameters
     });
   };
-
+  
   const handleSliderChange = (name, value) => {
     setModelParams({
       ...modelParams,
       [name]: value
     });
   };
-
+  
   // Format parameter display for large values
   const formatParameterDisplay = (value) => {
     if (value >= 1000) {
@@ -54,7 +56,7 @@ const MemoryCalculator = () => {
     }
     return `${value}B`;
   };
-
+  
   return (
     <div className="bg-gray-800 bg-opacity-60 backdrop-blur-lg rounded-xl p-6 shadow-lg overflow-hidden relative">
       <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500"></div>
@@ -99,7 +101,10 @@ const MemoryCalculator = () => {
           <h2 className="text-xl font-bold text-cyan-300">Select Model</h2>
           <p className="text-sm text-gray-400">or adjust parameters below</p>
         </div>
-        <ModelPresets onPresetSelect={handlePresetSelect} />
+        <ModelPresets 
+          onPresetSelect={handlePresetSelect} 
+          defaultPresetId={defaultPresetId} 
+        />
       </div>
 
       {/* Parameters Section */}
@@ -148,5 +153,4 @@ const MemoryCalculator = () => {
     </div>
   );
 };
-
 export default MemoryCalculator;

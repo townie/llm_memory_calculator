@@ -9,6 +9,8 @@ const ParameterSlider = ({ name, label, value, min, max, step, unit, onChange, t
   const isParamSlider = name === 'parameters';
   // For quantization with specific values
   const isQuantizationSlider = name === 'quantizationBits';
+  // For overhead factor slider
+  const isOverheadSlider = name === 'overheadFactor';
   
   // Constants for the three-segment scale
   const MAX_PARAM_VALUE = 10000; // 10T parameters
@@ -22,6 +24,9 @@ const ParameterSlider = ({ name, label, value, min, max, step, unit, onChange, t
 
   // Quantization specific values
   const quantizationValues = [2, 4, 8, 16, 32];
+
+  // Overhead factor tick values (for display only)
+  const overheadTicks = [1.0, 1.2, 1.4, 1.6, 1.8, 2.0];
   
   // Convert actual parameter value to slider position (0-100)
   useEffect(() => {
@@ -35,7 +40,7 @@ const ParameterSlider = ({ name, label, value, min, max, step, unit, onChange, t
       const position = quantizationToSlider(value);
       setSliderValue(position);
     } else {
-      // For regular linear sliders
+      // For regular linear sliders including overhead factor
       setSliderValue(((value - min) / (max - min)) * 100);
     }
   }, [value, min, max, isParamSlider, isQuantizationSlider]);
@@ -126,6 +131,12 @@ const ParameterSlider = ({ name, label, value, min, max, step, unit, onChange, t
       // For quantization, snap to the nearest allowed value
       const quantValue = sliderToQuantization(newSliderValue);
       onChange(name, quantValue);
+    } else if (isOverheadSlider) {
+      // For overhead factor, calculate the actual value based on the linear scale
+      // but round to 2 decimal places for better precision
+      const actualValue = min + (newSliderValue / 100) * (max - min);
+      const roundedValue = Math.round(actualValue * 100) / 100; // Round to 2 decimal places
+      onChange(name, roundedValue);
     } else {
       // Regular linear slider
       onChange(name, parseFloat(e.target.value));
@@ -143,6 +154,9 @@ const ParameterSlider = ({ name, label, value, min, max, step, unit, onChange, t
       } else {
         return `${val}${unit}`;
       }
+    } else if (isOverheadSlider) {
+      // For overhead factor, always show 2 decimal places
+      return `${val.toFixed(2)} ${unit}`;
     } else {
       return `${val} ${unit}`;
     }
@@ -191,7 +205,6 @@ const ParameterSlider = ({ name, label, value, min, max, step, unit, onChange, t
             // Calculate the exact percentage position for perfect alignment
             const tickPosition = index * (100 / (quantizationValues.length - 1));
             
-            // Adjust the tick position to account for thumb width
             return (
               <div key={tickValue} 
                    className="absolute" 
@@ -202,6 +215,28 @@ const ParameterSlider = ({ name, label, value, min, max, step, unit, onChange, t
                    }}>
                 <div className="h-2 w-0.5 bg-gray-500 mb-1 mx-auto"></div>
                 <div className="text-xs text-gray-400">{tickValue}</div>
+              </div>
+            );
+          })}
+        </div>
+      );
+    } else if (isOverheadSlider) {
+      // For overhead factor slider, show ticks for key values (visual only)
+      return (
+        <div className="relative w-full h-6 mt-1">
+          {overheadTicks.map(tickValue => {
+            // Calculate position based on min/max range
+            const tickPosition = ((tickValue - min) / (max - min)) * 100;
+            
+            return (
+              <div key={tickValue} 
+                   className="absolute" 
+                   style={{ 
+                     left: `${tickPosition}%`,
+                     transform: 'translateX(-50%)'
+                   }}>
+                <div className="h-2 w-0.5 bg-gray-500 mb-1 mx-auto"></div>
+                <div className="text-xs text-gray-400">{tickValue.toFixed(1)}</div>
               </div>
             );
           })}
@@ -242,7 +277,8 @@ const ParameterSlider = ({ name, label, value, min, max, step, unit, onChange, t
           name={name}
           min={0}
           max={100}
-          step={isQuantizationSlider ? 25 : 0.1}
+          // Use appropriate step size for each slider type
+          step={isQuantizationSlider ? 25 : isOverheadSlider ? 0.01 : 0.1}
           value={sliderValue}
           onChange={handleChange}
           onMouseDown={() => setIsActive(true)}
@@ -251,21 +287,13 @@ const ParameterSlider = ({ name, label, value, min, max, step, unit, onChange, t
           onTouchEnd={() => setIsActive(false)}
           className={`
             w-full h-1.5 bg-gray-700/70 rounded-full appearance-none cursor-pointer 
-            ${isParamSlider ? 'param-slider' : ''}
-            ${isQuantizationSlider ? 'slider-with-steps' : ''}
+            slider-with-steps
           `}
           style={{
             background: `linear-gradient(to right, rgb(34, 211, 238) 0%, rgb(6, 182, 212) ${percentage}%, rgb(31, 41, 55) ${percentage}%, rgb(31, 41, 55) 100%)`
           }}
         />
-        {isParamSlider || isQuantizationSlider ? (
-          renderTicks()
-        ) : (
-          <div className="flex justify-between mt-2">
-            <div className="text-xs text-gray-400">{min}</div>
-            <div className="text-xs text-gray-400">{max}</div>
-          </div>
-        )}
+        {renderTicks()}
       </div>
       
       {/* Add visual scale labels for Model Size slider */}

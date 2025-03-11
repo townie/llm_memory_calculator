@@ -4,12 +4,15 @@ const ModelPresets = ({ onPresetSelect }) => {
   const [activePreset, setActivePreset] = useState(null);
   
   const presets = [
-    { id: 'llama3-8b', name: 'Llama 3 8B', parameters: 8 },
-    { id: 'llama3-70b', name: 'Llama 3 70B', parameters: 70 },
-    { id: 'deepseek-r1-32b', name: 'DeepSeek R1 32B', parameters: 32 },
+    { id: 'smollm2 1.7b', name: 'SmolLM2 1.7b', parameters: 1.7},
+
+    { id: 'qwq-32b', name: 'QwQ 32B', parameters: 32},
+    { id: 'llama3.3-70b', name: 'Llama 3.3 70B', parameters: 70 },
+    { id: 'Qwen2.5-72b', name: 'Qwen2.5 72B', parameters: 72 },
+
     { id: 'deepseek-r1-671b', name: 'DeepSeek R1 671B', parameters: 671 },
-    { id: 'mistral-7b', name: 'Mistral 7B', parameters: 7 },
-    { id: 'gpt5-10t', name: 'GPT-5 10T', parameters: 10000 }
+ 
+    { id: 'gpt5-10t', name: 'GPT 5 10T', parameters: 10000 }
   ];
 
   const handlePresetClick = (preset) => {
