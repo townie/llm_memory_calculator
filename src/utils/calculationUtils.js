@@ -4,7 +4,7 @@
 
 /**
  * Calculate the GPU memory required for a model
- * 
+ *
  * @param {number} parameters - Model parameters in billions
  * @param {number} quantizationBits - Bits used for quantization
  * @param {number} overheadFactor - Memory overhead factor (e.g. 1.2 for 20% overhead)

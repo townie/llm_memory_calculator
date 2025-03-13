@@ -2,16 +2,16 @@ import { useState } from 'react';
 
 const ModelPresets = ({ onPresetSelect }) => {
   const [activePreset, setActivePreset] = useState(null);
-  
+
   const presets = [
     { id: 'smollm2 1.7b', name: 'SmolLM2 1.7b', parameters: 1.7},
 
-    { id: 'qwq-32b', name: 'QwQ 32B', parameters: 32},
+    { id: 'gemma3 27b', name: 'gemma3 27B', parameters: 32},
     { id: 'llama3.3-70b', name: 'Llama 3.3 70B', parameters: 70 },
     { id: 'Qwen2.5-72b', name: 'Qwen2.5 72B', parameters: 72 },
 
     { id: 'deepseek-r1-671b', name: 'DeepSeek R1 671B', parameters: 671 },
- 
+
     { id: 'gpt5-10t', name: 'GPT 5 10T', parameters: 10000 }
   ];
 

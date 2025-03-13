@@ -4,7 +4,7 @@ import Tooltip from './Tooltip';
 const GPURequirements = ({ memoryRequired }) => {
   // Default to both expanded for cleaner look
   const [expandedCard, setExpandedCard] = useState('consumer');
-  
+
   const gpuTypes = [
     { id: 'consumer', name: 'Consumer GPUs', label: 'Gaming/Desktop', cards: [
       { name: 'RTX 4090', memory: 24 },
@@ -21,11 +21,11 @@ const GPURequirements = ({ memoryRequired }) => {
       { name: 'A10G', memory: 24 },
     ]},
   ];
-  
+
   const calculateGpuCount = (gpuMemory) => {
     return Math.ceil(memoryRequired / gpuMemory);
   };
-  
+
   // Helper to generate color classes based on GPU count
   const getGpuCountColor = (count) => {
     if (count <= 1) return 'text-green-400';
@@ -39,7 +39,7 @@ const GPURequirements = ({ memoryRequired }) => {
     if (count <= 4) return 'bg-yellow-900/10';
     return 'bg-red-900/10';
   };
-  
+
   return (
     <div className="mt-6">
       <div className="flex items-center mb-2">
@@ -52,18 +52,18 @@ const GPURequirements = ({ memoryRequired }) => {
           </span>
         </Tooltip>
       </div>
-      
+
       <p className="text-sm text-gray-400 mb-4">
         Minimum number of GPUs needed to load this model
       </p>
-      
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {gpuTypes.map((type) => (
-          <div 
+          <div
             key={type.id}
             className="bg-gray-900/30 rounded-lg border border-gray-700/50 overflow-hidden transition-all duration-300 shadow-sm"
           >
-            <div 
+            <div
               className="px-4 py-3 cursor-pointer hover:bg-gray-800/50"
               onClick={() => setExpandedCard(expandedCard === type.id ? null : type.id)}
             >
@@ -72,19 +72,19 @@ const GPURequirements = ({ memoryRequired }) => {
                   <h3 className="text-lg font-semibold text-white">{type.name}</h3>
                   <span className="ml-2 text-xs py-0.5 px-2 bg-cyan-900/40 text-cyan-300 rounded-full">{type.label}</span>
                 </div>
-                <svg 
-                  xmlns="http://www.w3.org/2000/svg" 
-                  fill="none" 
-                  viewBox="0 0 24 24" 
-                  strokeWidth={2} 
-                  stroke="currentColor" 
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={2}
+                  stroke="currentColor"
                   className={`w-4 h-4 text-cyan-400 transition-transform ${expandedCard === type.id ? 'rotate-180' : ''}`}
                 >
                   <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
                 </svg>
               </div>
             </div>
-            
+
             <div className={`transition-all duration-300 overflow-hidden ${
               expandedCard === type.id ? 'max-h-96' : 'max-h-0'
             }`}>
@@ -94,7 +94,7 @@ const GPURequirements = ({ memoryRequired }) => {
                     const gpuCount = calculateGpuCount(card.memory);
                     const countColor = getGpuCountColor(gpuCount);
                     const rowBgClass = getGpuRowBgClass(gpuCount);
-                    
+
                     return (
                       <div key={card.name} className={`flex justify-between items-center p-2 rounded ${rowBgClass}`}>
                         <div>

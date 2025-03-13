@@ -26,15 +26,15 @@ export default [
     rules: {
       // Only the most critical JavaScript errors
       'no-undef': 'error',        // Catches undefined variables
-      
+
       // Only the most critical React errors
       'react/jsx-no-undef': 'error',            // Catches undefined variables
       'react/jsx-no-duplicate-props': 'error',  // Duplicate props will cause unexpected behavior
       'react/no-direct-mutation-state': 'error', // Direct state mutations break React's state management
-      
+
       // Critical Hook rules - these prevent subtle bugs
       'react-hooks/rules-of-hooks': 'error',    // Hooks must be called in the same order every render
-      
+
       // Fast Refresh - only if you're using React Fast Refresh
       'react-refresh/only-export-components': [
         'warn',

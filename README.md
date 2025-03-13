@@ -1,5 +1,7 @@
 # LLM GPU Memory Calculator
 
+[llmmem.com](llmmem.com)
+
 # Calculating GPU Memory for LLMs
 
 To determine GPU requirements for serving LLMs (like Llama3 70B), we need to calculate the required GPU memory using this formula:
@@ -29,4 +31,3 @@ M = ((70B × 4) × (32/8)) × 1.2 = 134.4 GB
 
 - `pnpm run lint` - Lint source files
 
- 

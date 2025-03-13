@@ -4,19 +4,19 @@ import Tooltip from './Tooltip';
 const ParameterSlider = ({ name, label, value, min, max, step, unit, onChange, tooltip }) => {
   const [isActive, setIsActive] = useState(false);
   const [sliderValue, setSliderValue] = useState(50); // Middle of slider range
-  
+
   // For parameter slider with non-linear scale
   const isParamSlider = name === 'parameters';
   // For quantization with specific values
   const isQuantizationSlider = name === 'quantizationBits';
   // For overhead factor slider
   const isOverheadSlider = name === 'overheadFactor';
-  
+
   // Constants for the three-segment scale
   const MAX_PARAM_VALUE = 10000; // 10T parameters
   const LOW_THRESHOLD = 3;      // End of logarithmic section
   const HIGH_THRESHOLD = 10;    // Start of exponential section
-  
+
   // Each section gets 1/3 of the slider
   const LOW_SECTION_PERCENT = 33.33;
   const MID_SECTION_PERCENT = 33.33;
@@ -27,7 +27,7 @@ const ParameterSlider = ({ name, label, value, min, max, step, unit, onChange, t
 
   // Overhead factor tick values (for display only)
   const overheadTicks = [1.0, 1.2, 1.4, 1.6, 1.8, 2.0];
-  
+
   // Convert actual parameter value to slider position (0-100)
   useEffect(() => {
     if (isParamSlider) {
@@ -50,7 +50,7 @@ const ParameterSlider = ({ name, label, value, min, max, step, unit, onChange, t
     const index = quantizationValues.indexOf(value);
     if (index === -1) {
       // If not found, find the nearest value
-      const nearest = quantizationValues.reduce((prev, curr) => 
+      const nearest = quantizationValues.reduce((prev, curr) =>
         Math.abs(curr - value) < Math.abs(prev - value) ? curr : prev
       );
       return quantizationValues.indexOf(nearest) * (100 / (quantizationValues.length - 1));
@@ -105,11 +105,11 @@ const ParameterSlider = ({ name, label, value, min, max, step, unit, onChange, t
   const handleChange = (e) => {
     const newSliderValue = parseFloat(e.target.value);
     setSliderValue(newSliderValue);
-    
+
     if (isParamSlider) {
       // Convert slider position to actual parameter value
       const actualValue = sliderToParam(newSliderValue);
-      
+
       // Format the value based on size
       let roundedValue;
       if (actualValue < 10) {
@@ -125,7 +125,7 @@ const ParameterSlider = ({ name, label, value, min, max, step, unit, onChange, t
         // For very large values (>1000B), round to nearest 100
         roundedValue = Math.round(actualValue / 100) * 100;
       }
-      
+
       onChange(name, roundedValue);
     } else if (isQuantizationSlider) {
       // For quantization, snap to the nearest allowed value
@@ -145,7 +145,7 @@ const ParameterSlider = ({ name, label, value, min, max, step, unit, onChange, t
 
   // For linear sliders or display purposes
   const percentage = isParamSlider || isQuantizationSlider ? sliderValue : ((value - min) / (max - min)) * 100;
-  
+
   // Format display value with unit
   const formatDisplayValue = (val) => {
     if (isParamSlider) {
@@ -161,13 +161,13 @@ const ParameterSlider = ({ name, label, value, min, max, step, unit, onChange, t
       return `${val} ${unit}`;
     }
   };
-  
+
   // Generate tick marks for different slider types
   const renderTicks = () => {
     if (isParamSlider) {
       // Key parameter values to show as ticks
       const tickValues = [0.5, 1, 3, 10, 100, 1000, 10000];
-      
+
       return (
         <div className="relative w-full h-6 mt-1">
           {tickValues.map(tickValue => {
@@ -176,11 +176,11 @@ const ParameterSlider = ({ name, label, value, min, max, step, unit, onChange, t
             if (tickValue >= 1000) {
               tickLabel = `${tickValue/1000}T`;
             }
-            
+
             return (
-              <div key={tickValue} 
-                   className="absolute" 
-                   style={{ 
+              <div key={tickValue}
+                   className="absolute"
+                   style={{
                      left: `${tickPosition}%`,
                      transform: 'translateX(-50%)'
                    }}>
@@ -191,9 +191,9 @@ const ParameterSlider = ({ name, label, value, min, max, step, unit, onChange, t
           })}
 
           {/* Add section dividers to visually separate the three segments */}
-          <div className="absolute h-3 w-0.5 bg-gray-600 top-0" 
+          <div className="absolute h-3 w-0.5 bg-gray-600 top-0"
                style={{ left: `${LOW_SECTION_PERCENT}%` }}></div>
-          <div className="absolute h-3 w-0.5 bg-gray-600 top-0" 
+          <div className="absolute h-3 w-0.5 bg-gray-600 top-0"
                style={{ left: `${LOW_SECTION_PERCENT + MID_SECTION_PERCENT}%` }}></div>
         </div>
       );
@@ -204,11 +204,11 @@ const ParameterSlider = ({ name, label, value, min, max, step, unit, onChange, t
           {quantizationValues.map((tickValue, index) => {
             // Calculate the exact percentage position for perfect alignment
             const tickPosition = index * (100 / (quantizationValues.length - 1));
-            
+
             return (
-              <div key={tickValue} 
-                   className="absolute" 
-                   style={{ 
+              <div key={tickValue}
+                   className="absolute"
+                   style={{
                      // Apply transform to center each tick mark with its corresponding value
                      left: `${tickPosition}%`,
                      transform: 'translateX(-50%)'
@@ -227,11 +227,11 @@ const ParameterSlider = ({ name, label, value, min, max, step, unit, onChange, t
           {overheadTicks.map(tickValue => {
             // Calculate position based on min/max range
             const tickPosition = ((tickValue - min) / (max - min)) * 100;
-            
+
             return (
-              <div key={tickValue} 
-                   className="absolute" 
-                   style={{ 
+              <div key={tickValue}
+                   className="absolute"
+                   style={{
                      left: `${tickPosition}%`,
                      transform: 'translateX(-50%)'
                    }}>
@@ -245,7 +245,7 @@ const ParameterSlider = ({ name, label, value, min, max, step, unit, onChange, t
     }
     return null;
   };
-  
+
   return (
     <div className="w-full transition-all duration-200 p-4 rounded-lg hover:bg-gray-800/40">
       <div className="flex justify-between items-center mb-3">
@@ -263,13 +263,13 @@ const ParameterSlider = ({ name, label, value, min, max, step, unit, onChange, t
             </Tooltip>
           )}
         </div>
-        <div 
+        <div
           className={`text-lg font-semibold px-3 py-1 rounded-lg transition-all duration-300 ${isActive ? 'bg-cyan-600/80 text-white scale-105 shadow-lg shadow-cyan-500/20' : 'bg-gray-700/50 text-cyan-300'}`}
         >
           {formatDisplayValue(value)}
         </div>
       </div>
-      
+
       <div className="relative mt-1 px-1">
         <input
           type="range"
@@ -286,7 +286,7 @@ const ParameterSlider = ({ name, label, value, min, max, step, unit, onChange, t
           onTouchStart={() => setIsActive(true)}
           onTouchEnd={() => setIsActive(false)}
           className={`
-            w-full h-1.5 bg-gray-700/70 rounded-full appearance-none cursor-pointer 
+            w-full h-1.5 bg-gray-700/70 rounded-full appearance-none cursor-pointer
             slider-with-steps
           `}
           style={{
@@ -295,7 +295,7 @@ const ParameterSlider = ({ name, label, value, min, max, step, unit, onChange, t
         />
         {renderTicks()}
       </div>
-      
+
       {/* Add visual scale labels for Model Size slider */}
       {isParamSlider && (
         <div className="mt-4 flex justify-between px-1 text-xs text-gray-500">
