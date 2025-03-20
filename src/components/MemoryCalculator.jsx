@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import ParameterSlider from './ParameterSlider';
 import ModelPresets from './ModelPresets';
 import GPURequirements from './GPURequirements';
+import CloudCost from './CloudCost';
 import Tooltip from './Tooltip';
 import { calculateMemory } from '../utils/calculationUtils';
 const MemoryCalculator = () => {
@@ -9,7 +10,7 @@ const MemoryCalculator = () => {
   const [modelParams, setModelParams] = useState({
     parameters: 70, // Changed from 7 to 70 for Llama 3.3 70B
     quantizationBits: 8,
-    overheadFactor: 1.2
+    overheadFactor: 1.0
   });
   const [memoryRequired, setMemoryRequired] = useState(0);
   const [isCalculating, setIsCalculating] = useState(false);
@@ -94,6 +95,7 @@ const MemoryCalculator = () => {
           </div>
         </div>
       </div>
+      <CloudCost memoryRequired={memoryRequired} />
 
       {/* Model Presets */}
       <div className="mb-8">
@@ -149,6 +151,9 @@ const MemoryCalculator = () => {
         </div>
       </div>
 
+      {/* Cloud Cost moved to the top */}
+
+      {/* GPU Requirements moved below Cloud Cost */}
       <GPURequirements memoryRequired={memoryRequired} />
     </div>
   );
